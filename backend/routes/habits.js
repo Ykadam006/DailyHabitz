@@ -1,26 +1,21 @@
+// /backend/routes/habits.js
 const express = require("express");
 const router = express.Router();
-const {
-  createHabit,
-  getHabits,
-  markHabitDone,
-  deleteHabit,
-  updateHabit,
-} = require("../controllers/habitController");
+const habitController = require("../controllers/habitController");
 
-// POST /habits → create a new habit
-router.post("/", createHabit);
+// CREATE
+router.post("/", habitController.createHabit);
 
-// GET /habits → fetch all habits
-router.get("/", getHabits);
+// GET user habits
+router.get("/", habitController.getHabits);
 
-// PUT /habits/:id/done → mark a habit as done
-router.put("/:id/done", markHabitDone);
+// MARK DONE
+router.post("/:id/done", habitController.markHabitDone);
 
-// PUT /habits/:id → update title/frequency/notes
-router.put("/:id", updateHabit);
+// UPDATE
+router.put("/:id", habitController.updateHabit);
 
-// DELETE /habits/:id → delete a habit
-router.delete("/:id", deleteHabit);
+// DELETE
+router.delete("/:id", habitController.deleteHabit);
 
 module.exports = router;
