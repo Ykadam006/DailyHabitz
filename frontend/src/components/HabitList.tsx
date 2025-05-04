@@ -3,16 +3,17 @@
 import { useEffect, useState } from "react";
 import { getHabits, markHabitDone, deleteHabit } from "../lib/api";
 import HabitEditForm from "./HabitEditForm";
+import HabitCalendar from "./HabitCalendar";
 
 type Habit = {
-    _id: string;
-    title: string;
-    frequency: string;
-    notes?: string;
-    currentStreak?: number;
-    xp?: number;
-    completedDates?: string[];
-  };
+  _id: string;
+  title: string;
+  frequency: string;
+  notes?: string;
+  currentStreak?: number;
+  xp?: number;
+  completedDates?: string[];
+};
 
 export default function HabitList() {
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -64,6 +65,7 @@ export default function HabitList() {
 
   return (
     <div className="mt-6 space-y-4">
+      {/* Filter Dropdown */}
       <div className="flex justify-end mb-2">
         <select
           className="p-2 border rounded"
@@ -78,6 +80,7 @@ export default function HabitList() {
         </select>
       </div>
 
+      {/* Habit Cards */}
       {habits
         .filter((habit) => filter === "all" || habit.frequency === filter)
         .map((habit) => (
@@ -105,10 +108,29 @@ export default function HabitList() {
                     🔁 Streak: <strong>{habit.currentStreak ?? 0}</strong>{" "}
                     &nbsp;|&nbsp; ⚡ XP: <strong>{habit.xp ?? 0}</strong>
                   </p>
+
+                  {/* 🧬 XP Level System */}
+                  {typeof habit.xp === "number" && (
+                    <div className="mt-1">
+                      🧬 Level: <strong>{Math.floor(habit.xp / 100)}</strong>
+                      <div className="w-full bg-gray-200 h-2 mt-1 rounded">
+                        <div
+                          className="bg-blue-600 h-2 rounded"
+                          style={{ width: `${habit.xp % 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 📆 Calendar */}
+                  {habit.completedDates && habit.completedDates.length > 0 && (
+                    <HabitCalendar completedDates={habit.completedDates} />
+                  )}
                 </>
               )}
             </div>
 
+            {/* Action Buttons */}
             {editingId !== habit._id && (
               <div className="space-x-2 mt-1 ml-2">
                 <button
