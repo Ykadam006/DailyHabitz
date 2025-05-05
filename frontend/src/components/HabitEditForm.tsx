@@ -29,7 +29,7 @@ export default function HabitEditForm({ habit, onClose, onSave }: Props) {
       await updateHabit(habit._id, { title, frequency, notes });
       onSave();
       onClose();
-    } catch (err) {
+    } catch  {
       alert("Failed to update habit.");
     } finally {
       setLoading(false);

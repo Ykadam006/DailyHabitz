@@ -24,8 +24,8 @@ export default function HabitList({ userId }: { userId: string }) {
     try {
       const data = await getHabits(userId);
       setHabits(data);
-    } catch (err) {
-      console.error("Error fetching habits", err);
+    } catch  {
+      console.error("Error fetching habits");
     }
   };
 
