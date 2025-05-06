@@ -29,48 +29,57 @@ export default function HabitEditForm({ habit, onClose, onSave }: Props) {
       await updateHabit(habit._id, { title, frequency, notes });
       onSave();
       onClose();
-    } catch  {
-      alert("Failed to update habit.");
+    } catch {
+      alert("❌ Failed to update habit.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-2 space-y-2">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-4 rounded-lg shadow-md border border-[#d1e8e2] mt-2 space-y-3"
+    >
+      <h3 className="text-xl font-semibold text-[#243E36]">✏️ Edit Habit</h3>
+
       <input
-        className="w-full p-2 border rounded"
+        className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
+        placeholder="Habit title"
       />
+
       <select
-        className="w-full p-2 border rounded"
+        className="w-full px-4 py-2 rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#006d77]"
         value={frequency}
         onChange={(e) => setFrequency(e.target.value)}
       >
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
+        <option value="daily">🌞 Daily</option>
+        <option value="weekly">📅 Weekly</option>
       </select>
+
       <textarea
-        className="w-full p-2 border rounded"
+        className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        placeholder="Notes"
+        placeholder="Optional notes..."
       />
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          {loading ? "Saving..." : "💾 Save"}
-        </button>
+
+      <div className="flex justify-end gap-2 pt-2">
         <button
           type="button"
-          className="px-3 py-1 bg-gray-300 rounded"
           onClick={onClose}
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
         >
-          Cancel
+          ❌ Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-[#243E36] text-white rounded-lg hover:bg-[#1b2c28] transition"
+        >
+          {loading ? "Saving..." : "💾 Save"}
         </button>
       </div>
     </form>

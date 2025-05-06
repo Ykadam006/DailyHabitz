@@ -24,7 +24,7 @@ export default function HabitList({ userId }: { userId: string }) {
     try {
       const data = await getHabits(userId);
       setHabits(data);
-    } catch  {
+    } catch {
       console.error("Error fetching habits");
     }
   };
@@ -39,50 +39,84 @@ export default function HabitList({ userId }: { userId: string }) {
       await markHabitDone(id);
       await fetchHabits();
     } catch (err: any) {
-      alert(err.message); // 💬 Show alert if already marked
+      alert(err.message); // Alert if already marked
     }
     setLoadingId(null);
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this habit?")) return;
+    if (!confirm("❗ Delete this habit?")) return;
     setLoadingId(id);
     await deleteHabit(id);
     await fetchHabits();
     setLoadingId(null);
   };
 
-  if (!habits.length) return <p className="mt-4">No habits yet.</p>;
+  if (!habits.length)
+    return (
+      <p className="mt-6 text-center text-gray-500">No habits yet. Start by adding one!</p>
+    );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {habits.map((habit) => (
-        <div key={habit._id} className="border p-4 rounded shadow flex flex-col">
+        <div
+          key={habit._id}
+          className="border border-[#d1e8e2] bg-white p-4 rounded-xl shadow-sm transition hover:shadow-md"
+        >
           {editingId === habit._id ? (
-            <HabitEditForm habit={habit} onClose={() => setEditingId(null)} onSave={fetchHabits} />
+            <HabitEditForm
+              habit={habit}
+              onClose={() => setEditingId(null)}
+              onSave={fetchHabits}
+            />
           ) : (
             <>
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-semibold">{habit.title}</h3>
-                  <p className="text-sm text-gray-500">🕒 {habit.frequency}</p>
-                  {habit.notes && <p className="text-sm">{habit.notes}</p>}
-                  <p className="text-sm mt-1">
-                    🔁 Streak: {habit.currentStreak || 0} | ⚡ XP: {habit.xp || 0}
+                  <h3 className="text-xl font-bold text-[#243E36] mb-1">{habit.title}</h3>
+                  <p className="text-sm text-[#7CA982] mb-1">🕒 {habit.frequency}</p>
+                  {habit.notes && (
+                    <p className="text-sm text-gray-600 italic mb-1">{habit.notes}</p>
+                  )}
+                  <p className="text-sm mt-1 text-[#006d77]">
+                    🔁 Streak: <strong>{habit.currentStreak || 0}</strong> | ⚡ XP:{" "}
+                    <strong>{habit.xp || 0}</strong>
                   </p>
                 </div>
                 <div className="space-x-2 mt-1">
-                  <button onClick={() => handleMarkDone(habit._id)} disabled={loadingId === habit._id}>✅</button>
-                  <button onClick={() => setEditingId(habit._id)}>✏️</button>
-                  <button onClick={() => handleDelete(habit._id)} disabled={loadingId === habit._id}>🗑️</button>
+                  <button
+                    onClick={() => handleMarkDone(habit._id)}
+                    disabled={loadingId === habit._id}
+                    className="text-green-600 hover:text-green-700 text-xl"
+                    title="Mark Done"
+                  >
+                    ✅
+                  </button>
+                  <button
+                    onClick={() => setEditingId(habit._id)}
+                    className="text-blue-500 hover:text-blue-600 text-xl"
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    onClick={() => handleDelete(habit._id)}
+                    disabled={loadingId === habit._id}
+                    className="text-red-500 hover:text-red-600 text-xl"
+                    title="Delete"
+                  >
+                    🗑️
+                  </button>
                 </div>
               </div>
 
-              {Array.isArray(habit.completedDates) && habit.completedDates.length > 0 && (
-                <div className="mt-3">
-                  <HabitCalendar completedDates={habit.completedDates} />
-               </div>
-              )}
+              {Array.isArray(habit.completedDates) &&
+                habit.completedDates.length > 0 && (
+                  <div className="mt-4">
+                    <HabitCalendar completedDates={habit.completedDates} />
+                  </div>
+                )}
             </>
           )}
         </div>
