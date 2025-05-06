@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions"; // ✅ import from lib
 import { redirect } from "next/navigation";
 import HabitForm from "@/components/HabitForm";
 import HabitList from "@/components/HabitList";
