@@ -21,11 +21,21 @@ export async function getHabits(userId: string) {
   return res.json();
 }
 
-export async function markHabitDone(id: string) {
-  const res = await fetch(`${API_BASE}/${id}/done`, { method: "POST" });
-  if (!res.ok) throw new Error("Failed to mark done");
+export const markHabitDone = async (habitId: string) => {
+  const res = await fetch(`http://localhost:5050/habits/${habitId}/done`, {
+    method: "POST", // Make sure it's POST
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err?.error || "Failed to mark habit as done");
+  }
+
   return res.json();
-}
+};
 
 export async function deleteHabit(id: string) {
   const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
@@ -43,3 +53,17 @@ export async function updateHabit(id: string, updatedData: any) {
 
   return res.json();
 }
+
+export const addHabit = async (title: string, userId: string) => {
+  const response = await fetch("/api/habits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, userId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add habit");
+  }
+
+  return response.json();
+};

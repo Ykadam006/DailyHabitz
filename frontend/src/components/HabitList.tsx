@@ -35,8 +35,12 @@ export default function HabitList({ userId }: { userId: string }) {
 
   const handleMarkDone = async (id: string) => {
     setLoadingId(id);
-    await markHabitDone(id);
-    await fetchHabits();
+    try {
+      await markHabitDone(id);
+      await fetchHabits();
+    } catch (err: any) {
+      alert(err.message); // 💬 Show alert if already marked
+    }
     setLoadingId(null);
   };
 
