@@ -1,6 +1,16 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// src/lib/auth.ts
+import { NextAuthOptions } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
 
-export const getSession = async () => {
-  return await getServerSession(authOptions);
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+  ],
+  pages: {
+    signIn: "/signin",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
