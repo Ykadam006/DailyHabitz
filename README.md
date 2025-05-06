@@ -71,6 +71,21 @@
 Ensure IP whitelisting for Render deployment in MongoDB Atlas.
 
 ---
+📸 Screenshots
+🟢 Home Page - Sign In Screen
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.19.30%E2%80%AFAM.png" alt="Sign In Screen" width="600" />
+👤 Authenticated Dashboard - Empty Habit
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.19.53%E2%80%AFAM.png" alt="Dashboard with no habits" width="600" />
+🧩 Add Habit UI Styling
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.23.34%E2%80%AFAM.png" alt="Add Habit Form" width="600" />
+✅ Habit Added + Calendar
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.23.52%E2%80%AFAM.png" alt="Habit Calendar" width="600" />
+❌ Confirm Habit Deletion
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.23.59%E2%80%AFAM.png" alt="Delete Confirmation" width="600" />
+🔁 Already Marked Habit Warning
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.24.05%E2%80%AFAM.png" alt="Already Marked Alert" width="600" />
+✏️ Edit Habit UI
+<img src="./screenshots/Screenshot%202025-05-06%20at%203.24.20%E2%80%AFAM.png" alt="Edit Habit" width="600" />
 
 ## ⚙️ Local Development
 
