@@ -1,4 +1,4 @@
-export const API_BASE = "https://dailyhabitz.onrender.com";
+export const API_BASE = "https://dailyhabitz.onrender.com/habits";
 
 export async function createHabit(habit: {
   title: string;
@@ -22,8 +22,8 @@ export async function getHabits(userId: string) {
 }
 
 export const markHabitDone = async (habitId: string) => {
-  const res = await fetch(`http://localhost:5050/habits/${habitId}/done`, {
-    method: "POST", // Make sure it's POST
+  const res = await fetch(`${API_BASE}/${habitId}/done`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -53,17 +53,3 @@ export async function updateHabit(id: string, updatedData: any) {
 
   return res.json();
 }
-
-export const addHabit = async (title: string, userId: string) => {
-  const response = await fetch("/api/habits", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, userId }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to add habit");
-  }
-
-  return response.json();
-};
