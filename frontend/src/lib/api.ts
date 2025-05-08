@@ -1,4 +1,4 @@
-export const API_BASE = "http://localhost:5050/habits";
+export const API_BASE = "https://dailyhabitz.onrender.com";
 
 export async function createHabit(habit: {
   title: string;
