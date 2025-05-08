@@ -3,21 +3,25 @@ const cors = require("cors");
 const connectDB = require("./db");
 require("dotenv").config();
 
+const habitRoutes = require("./routes/habits");
+
 const app = express();
 const PORT = process.env.PORT || 5050;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-const habitRoutes = require("./routes/habits");
+// Routes
 app.use("/habits", habitRoutes);
 
-// ✅ Wrap in async function
+// Start server only after DB connects
 async function startServer() {
   try {
-    await connectDB(); // make sure this finishes
+    await connectDB();
     app.listen(PORT, () => {
-      console.log(`✅ Server running at http://localhost:${PORT}`);
+      console.log(`✅ Server running at ${BASE_URL}`);
     });
   } catch (err) {
     console.error("❌ Failed to start server:", err);
