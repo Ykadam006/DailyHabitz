@@ -2,7 +2,7 @@ import HabitForm from "@/components/HabitForm";
 import HabitList from "@/components/HabitList";
 
 export default function DashboardPage() {
-  const userId = "default-user"; // Optional: Hardcoded userId or fetch from another source if needed
+  const userId = "default-user"; 
 
   return (
     <main className="min-h-screen bg-[#f1f7ed] px-6 py-12">

@@ -15,23 +15,23 @@ export default function HabitForm({ userId }: { userId: string }) {
       setTitle("");
       setFrequency("daily");
       setNotes("");
-      window.location.reload(); // Quick refresh
+      window.location.reload();
     } catch (err) {
-      alert("❌ Failed to create habit");
+      alert("Failed to create habit");
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gradient-to-br from-[#edf6f9] via-[#83c5be] to-[#006d77] text-gray-800 p-6 rounded-2xl shadow-lg max-w-xl mx-auto"
+      className="bg-white border border-gray-200 p-6 rounded-xl shadow-xl max-w-xl mx-auto"
     >
-      <h2 className="text-2xl font-bold mb-4 text-[#243E36]">🌱 Create a New Habit</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-[#006d77]">Create a New Habit</h2>
 
       <input
         type="text"
-        placeholder="Enter habit title"
-        className="w-full px-4 py-2 mb-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
+        placeholder="Habit title"
+        className="w-full px-4 py-2 mb-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#006d77] transition"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
@@ -40,24 +40,24 @@ export default function HabitForm({ userId }: { userId: string }) {
       <select
         value={frequency}
         onChange={(e) => setFrequency(e.target.value)}
-        className="w-full px-4 py-2 mb-3 rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#006d77]"
+        className="w-full px-4 py-2 mb-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#006d77] transition"
       >
-        <option value="daily">🌞 Daily</option>
-        <option value="weekly">📅 Weekly</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
       </select>
 
       <textarea
-        placeholder="Add notes (optional)"
-        className="w-full px-4 py-2 mb-4 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
+        placeholder="Notes (optional)"
+        className="w-full px-4 py-2 mb-4 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#006d77] transition"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
       />
 
       <button
         type="submit"
-        className="w-full py-2 bg-[#243E36] hover:bg-[#1b2c28] text-white font-semibold rounded-lg transition"
+        className="w-full py-2 bg-[#006d77] hover:bg-[#005258] text-white font-medium rounded-lg transition"
       >
-        ➕ Add Habit
+        Add Habit
       </button>
     </form>
   );

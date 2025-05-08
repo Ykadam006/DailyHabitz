@@ -15,13 +15,14 @@ export default function HabitCalendar({ completedDates }: Props) {
   const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
 
   return (
-    <div className="mt-2">
-      <div className="grid grid-cols-7 text-xs font-medium text-center text-gray-600 mb-1">
+    <div className="mt-4 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+      <div className="grid grid-cols-7 text-sm font-medium text-center text-gray-600 mb-2">
         {weekdays.map((d, i) => (
-          <div key={i}>{d}</div>
+          <div key={i} className="uppercase">{d}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1 text-[10px] text-center">
+
+      <div className="grid grid-cols-7 gap-1 text-center text-xs">
         {days.map((day, idx) => {
           const completed = completedDates.some((dateStr) =>
             isSameDay(new Date(dateStr), day)
@@ -29,12 +30,14 @@ export default function HabitCalendar({ completedDates }: Props) {
           return (
             <div
               key={idx}
-              title={format(day, "PP")}
-              className={`flex flex-col items-center justify-center rounded-sm h-10 ${
-                completed ? "bg-green-600 text-white" : "bg-gray-300"
-              }`}
+              title={format(day, "PPP")}
+              className={`flex items-center justify-center h-8 rounded-md transition-colors duration-150 ${
+                completed
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-100 text-gray-500"
+              } hover:ring-2 hover:ring-offset-1 hover:ring-green-400`}
             >
-              <span className="font-semibold">{format(day, "d")}</span>
+              {format(day, "d")}
             </div>
           );
         })}

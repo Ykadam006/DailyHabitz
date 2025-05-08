@@ -1,4 +1,3 @@
-// src/models/HabitModel.ts
 import mongoose, { Schema, Document, model, models } from "mongoose";
 
 export interface HabitDocument extends Document {

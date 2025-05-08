@@ -39,13 +39,13 @@ export default function HabitList({ userId }: { userId: string }) {
       await markHabitDone(id);
       await fetchHabits();
     } catch (err: any) {
-      alert(err.message); // Alert if already marked
+      alert(err.message);
     }
     setLoadingId(null);
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("❗ Delete this habit?")) return;
+    if (!confirm("Are you sure you want to delete this habit?")) return;
     setLoadingId(id);
     await deleteHabit(id);
     await fetchHabits();
@@ -54,15 +54,17 @@ export default function HabitList({ userId }: { userId: string }) {
 
   if (!habits.length)
     return (
-      <p className="mt-6 text-center text-gray-500">No habits yet. Start by adding one!</p>
+      <p className="mt-6 text-center text-gray-500">
+        No habits yet. Start by adding one!
+      </p>
     );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mt-8">
       {habits.map((habit) => (
         <div
           key={habit._id}
-          className="border border-[#d1e8e2] bg-white p-4 rounded-xl shadow-sm transition hover:shadow-md"
+          className="border border-gray-200 bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-all"
         >
           {editingId === habit._id ? (
             <HabitEditForm
@@ -74,39 +76,39 @@ export default function HabitList({ userId }: { userId: string }) {
             <>
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-xl font-bold text-[#243E36] mb-1">{habit.title}</h3>
-                  <p className="text-sm text-[#7CA982] mb-1">🕒 {habit.frequency}</p>
+                  <h3 className="text-xl font-bold text-[#243E36] mb-1">
+                    {habit.title}
+                  </h3>
+                  <p className="text-sm text-[#7CA982] mb-1">{habit.frequency}</p>
                   {habit.notes && (
                     <p className="text-sm text-gray-600 italic mb-1">{habit.notes}</p>
                   )}
-                  <p className="text-sm mt-1 text-[#006d77]">
-                    🔁 Streak: <strong>{habit.currentStreak || 0}</strong> | ⚡ XP:{" "}
-                    <strong>{habit.xp || 0}</strong>
+                  <p className="text-sm mt-2 text-[#006d77]">
+                    Streak:{" "}
+                    <span className="font-semibold">{habit.currentStreak || 0}</span>{" "}
+                    | XP: <span className="font-semibold">{habit.xp || 0}</span>
                   </p>
                 </div>
-                <div className="space-x-2 mt-1">
+                <div className="flex flex-col space-y-2 items-end">
                   <button
                     onClick={() => handleMarkDone(habit._id)}
                     disabled={loadingId === habit._id}
-                    className="text-green-600 hover:text-green-700 text-xl"
-                    title="Mark Done"
+                    className="text-green-600 hover:text-green-700 text-sm font-medium"
                   >
-                    ✅
+                    Mark Done
                   </button>
                   <button
                     onClick={() => setEditingId(habit._id)}
-                    className="text-blue-500 hover:text-blue-600 text-xl"
-                    title="Edit"
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                   >
-                    ✏️
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(habit._id)}
                     disabled={loadingId === habit._id}
-                    className="text-red-500 hover:text-red-600 text-xl"
-                    title="Delete"
+                    className="text-red-500 hover:text-red-600 text-sm font-medium"
                   >
-                    🗑️
+                    Delete
                   </button>
                 </div>
               </div>

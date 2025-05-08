@@ -7,7 +7,7 @@ const habitSchema = new mongoose.Schema({
   currentStreak: { type: Number, default: 0 },
   xp: { type: Number, default: 0 },
   completedDates: [Date],
-  userId: String, // 👈 New field
+  userId: String, 
 });
 
 module.exports = mongoose.model("Habit", habitSchema);
