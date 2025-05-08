@@ -1,17 +1,17 @@
-# 🌿 DailyHabitz - Full Stack Habit Tracker
+# DailyHabitz - Full Stack Habit Tracker
 
 DailyHabitz is a beautifully designed full-stack habit tracking app built using **Next.js**, **Node.js**, **Express**, and **MongoDB Atlas**. It allows users to create, manage, and track daily/weekly habits with a clean UI and streak tracking system.
 
 ---
 
-## 🔗 Live Links
+## Live Links
 
 - **Frontend**: [https://dailyhabitz-1.onrender.com](https://dailyhabitz-1.onrender.com/)
 - **Backend**: [https://dailyhabitz.onrender.com/habits](https://dailyhabitz.onrender.com/habits)
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 | Layer     | Tech                          |
 |-----------|-------------------------------|
@@ -22,7 +22,7 @@ DailyHabitz is a beautifully designed full-stack habit tracking app built using 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 DailyHabitz/
@@ -41,7 +41,7 @@ DailyHabitz/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Backend
 
@@ -62,7 +62,7 @@ npm run dev
 
 ---
 
-## 🌐 API Endpoints
+## API Endpoints
 
 Base URL: `https://dailyhabitz.onrender.com/habits`
 
@@ -76,7 +76,7 @@ Base URL: `https://dailyhabitz.onrender.com/habits`
 
 ---
 
-## 🎨 Features
+## Features
 
 - 📝 Add / Edit / Delete Habits
 - 🔁 Daily & Weekly Frequency
@@ -87,7 +87,7 @@ Base URL: `https://dailyhabitz.onrender.com/habits`
 
 ---
 
-## 📸 UI Previews
+## UI Previews
 
 Include screenshots in `/screenshots` folder or update paths:
 - Home Page
