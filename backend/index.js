@@ -7,7 +7,6 @@ const habitRoutes = require("./routes/habits");
 
 const app = express();
 const PORT = process.env.PORT || 5050;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 // Middleware
 app.use(cors());
@@ -21,7 +20,7 @@ async function startServer() {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`✅ Server running at ${BASE_URL}`);
+      console.log("✅ Server running at: https://dailyhabitz.onrender.com");
     });
   } catch (err) {
     console.error("❌ Failed to start server:", err);
