@@ -1,26 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { createHabit } from "../lib/api";
+import { useHabits } from "@/hooks/useHabits";
+import { toast } from "sonner";
 
-type Props = { userId: string; onSuccess?: () => void };
+type Props = { userId: string };
 
-export default function HabitForm({ userId, onSuccess }: Props) {
+export default function HabitForm({ userId }: Props) {
   const [title, setTitle] = useState("");
   const [frequency, setFrequency] = useState("daily");
   const [notes, setNotes] = useState("");
+  const { createMutation } = useHabits(userId);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await createHabit({ title, frequency, notes, userId });
-      setTitle("");
-      setFrequency("daily");
-      setNotes("");
-      onSuccess?.();
-    } catch {
-      alert("Failed to create habit");
-    }
+    createMutation.mutate(
+      { title, frequency, notes, userId },
+      {
+        onSuccess: () => {
+          setTitle("");
+          setFrequency("daily");
+          setNotes("");
+        },
+        onError: () => {
+          toast.error("Failed to create habit");
+        },
+      }
+    );
   };
 
   return (
@@ -28,7 +34,9 @@ export default function HabitForm({ userId, onSuccess }: Props) {
       onSubmit={handleSubmit}
       className="bg-white border border-gray-200 p-6 rounded-xl shadow-xl max-w-xl mx-auto"
     >
-      <h2 className="text-2xl font-semibold mb-4 text-[#006d77]">Create a New Habit</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-[#006d77]">
+        Create a New Habit
+      </h2>
 
       <input
         type="text"
@@ -37,12 +45,14 @@ export default function HabitForm({ userId, onSuccess }: Props) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
+        disabled={createMutation.isPending}
       />
 
       <select
         value={frequency}
         onChange={(e) => setFrequency(e.target.value)}
         className="w-full px-4 py-2 mb-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#006d77] transition"
+        disabled={createMutation.isPending}
       >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
@@ -57,9 +67,10 @@ export default function HabitForm({ userId, onSuccess }: Props) {
 
       <button
         type="submit"
-        className="w-full py-2 bg-[#006d77] hover:bg-[#005258] text-white font-medium rounded-lg transition"
+        disabled={createMutation.isPending}
+        className="w-full py-2 bg-[#006d77] hover:bg-[#005258] text-white font-medium rounded-lg transition disabled:opacity-70"
       >
-        Add Habit
+        {createMutation.isPending ? "Adding..." : "Add Habit"}
       </button>
     </form>
   );

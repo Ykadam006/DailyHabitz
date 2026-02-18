@@ -1,5 +1,15 @@
 const BASE = process.env.NEXT_PUBLIC_API_URL || "https://dailyhabitz.onrender.com";
 export const API_BASE = `${BASE}/habits`;
+export const HEALTH_URL = `${BASE}/health`;
+
+/** Warm up backend (e.g. Render free tier) - call on landing page load */
+export async function warmUpBackend(): Promise<void> {
+  try {
+    await fetch(HEALTH_URL);
+  } catch {
+    // Silently ignore - backend may be cold; user will wait when they navigate
+  }
+}
 
 export async function createHabit(habit: {
   title: string;

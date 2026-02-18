@@ -1,39 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { updateHabit } from "../lib/api";
-
-type Habit = {
-  _id: string;
-  title: string;
-  frequency: string;
-  notes?: string;
-};
+import type { Habit } from "@/hooks/useHabits";
 
 type Props = {
   habit: Habit;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (data: { title: string; frequency: string; notes: string }) => void;
+  isSaving?: boolean;
 };
 
-export default function HabitEditForm({ habit, onClose, onSave }: Props) {
+export default function HabitEditForm({
+  habit,
+  onClose,
+  onSave,
+  isSaving = false,
+}: Props) {
   const [title, setTitle] = useState(habit.title);
   const [frequency, setFrequency] = useState(habit.frequency);
   const [notes, setNotes] = useState(habit.notes || "");
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await updateHabit(habit._id, { title, frequency, notes });
-      onSave();
-      onClose();
-    } catch {
-      alert("Failed to update habit.");
-    } finally {
-      setLoading(false);
-    }
+    onSave({ title, frequency, notes });
   };
 
   return (
@@ -77,9 +66,10 @@ export default function HabitEditForm({ habit, onClose, onSave }: Props) {
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-[#243E36] text-white rounded-lg hover:bg-[#1b2c28] transition"
+          disabled={isSaving}
+          className="px-4 py-2 bg-[#243E36] text-white rounded-lg hover:bg-[#1b2c28] transition disabled:opacity-70"
         >
-          {loading ? "Saving..." : "Save"}
+          {isSaving ? "Saving..." : "Save"}
         </button>
       </div>
     </form>

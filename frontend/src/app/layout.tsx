@@ -1,5 +1,7 @@
 import "./globals.css";
 import AuthProvider from "@/components/SessionProvider";
+import QueryProvider from "@/components/QueryProvider";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -9,7 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            {children}
+            <Toaster position="top-center" richColors closeButton />
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

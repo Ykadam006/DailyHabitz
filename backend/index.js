@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 5050;
 app.use(cors());
 app.use(express.json());
 
+// Health check - warms up cold-started instances (e.g. Render free tier)
+app.get("/health", (_, res) => res.status(200).json({ status: "ok" }));
+
 // Routes
 app.use("/habits", habitRoutes);
 
