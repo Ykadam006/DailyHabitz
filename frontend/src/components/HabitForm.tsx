@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { createHabit } from "../lib/api";
 
-export default function HabitForm({ userId }: { userId: string }) {
+type Props = { userId: string; onSuccess?: () => void };
+
+export default function HabitForm({ userId, onSuccess }: Props) {
   const [title, setTitle] = useState("");
   const [frequency, setFrequency] = useState("daily");
   const [notes, setNotes] = useState("");
@@ -15,8 +17,8 @@ export default function HabitForm({ userId }: { userId: string }) {
       setTitle("");
       setFrequency("daily");
       setNotes("");
-      window.location.reload();
-    } catch (err) {
+      onSuccess?.();
+    } catch {
       alert("Failed to create habit");
     }
   };

@@ -1,8 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import HabitForm from "@/components/HabitForm";
 import HabitList from "@/components/HabitList";
 
 export default function DashboardPage() {
-  const userId = "default-user"; 
+  const userId = "default-user";
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   return (
     <main className="min-h-screen bg-[#f1f7ed] px-6 py-12">
@@ -11,8 +15,8 @@ export default function DashboardPage() {
           👋 Welcome to DailyHabitz!
         </h1>
 
-        <HabitForm userId={userId} />
-        <HabitList userId={userId} />
+        <HabitForm userId={userId} onSuccess={() => setRefreshTrigger((t) => t + 1)} />
+        <HabitList userId={userId} refreshTrigger={refreshTrigger} />
       </div>
     </main>
   );

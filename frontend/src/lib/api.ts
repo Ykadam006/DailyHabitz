@@ -1,4 +1,5 @@
-export const API_BASE = "https://dailyhabitz.onrender.com/habits";
+const BASE = process.env.NEXT_PUBLIC_API_URL || "https://dailyhabitz.onrender.com";
+export const API_BASE = `${BASE}/habits`;
 
 export async function createHabit(habit: {
   title: string;
@@ -42,7 +43,10 @@ export async function deleteHabit(id: string) {
   if (!res.ok) throw new Error("Failed to delete habit");
 }
 
-export async function updateHabit(id: string, updatedData: any) {
+export async function updateHabit(
+  id: string,
+  updatedData: { title?: string; frequency?: string; notes?: string }
+) {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

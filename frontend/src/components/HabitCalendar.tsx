@@ -4,7 +4,7 @@ type Props = {
   completedDates: string[];
 };
 
-const daysToShow = 30;
+const daysToShow = 35; // 5 weeks for a clean grid
 
 export default function HabitCalendar({ completedDates }: Props) {
   const today = startOfToday();

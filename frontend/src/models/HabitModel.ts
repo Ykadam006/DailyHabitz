@@ -1,15 +1,14 @@
-import mongoose, { Schema, Document, model, models } from "mongoose";
-
-export interface HabitDocument extends Document {
+/**
+ * Type-only model matching backend Habit schema.
+ * Used for type references; API calls use lib/api.ts.
+ */
+export interface HabitDocument {
+  _id: string;
   title: string;
-  completed: boolean;
+  frequency: string;
+  notes?: string;
+  currentStreak: number;
+  xp: number;
+  completedDates: string[];
   userId: string;
 }
-
-const HabitSchema = new Schema<HabitDocument>({
-  title: { type: String, required: true },
-  completed: { type: Boolean, default: false },
-  userId: { type: String, required: true },
-});
-
-export default models.Habit || model<HabitDocument>("Habit", HabitSchema);

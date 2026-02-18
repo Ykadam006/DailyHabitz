@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getHabits, markHabitDone, deleteHabit } from "../lib/api";
 import HabitEditForm from "./HabitEditForm";
 import HabitCalendar from "./HabitCalendar";
@@ -15,31 +15,33 @@ type Habit = {
   completedDates?: string[];
 };
 
-export default function HabitList({ userId }: { userId: string }) {
+type HabitListProps = { userId: string; refreshTrigger?: number };
+
+export default function HabitList({ userId, refreshTrigger = 0 }: HabitListProps) {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const fetchHabits = async () => {
+  const fetchHabits = useCallback(async () => {
     try {
       const data = await getHabits(userId);
       setHabits(data);
     } catch {
       console.error("Error fetching habits");
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchHabits();
-  }, []);
+  }, [fetchHabits, refreshTrigger]);
 
   const handleMarkDone = async (id: string) => {
     setLoadingId(id);
     try {
       await markHabitDone(id);
       await fetchHabits();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to mark habit done");
     }
     setLoadingId(null);
   };
