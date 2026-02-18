@@ -1,7 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import type { Habit } from "@/hooks/useHabits";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const editSchema = z.object({
+  title: z.string().min(1, "Title is required").max(100),
+  frequency: z.enum(["daily", "weekly"]),
+  notes: z.string().max(500).optional(),
+});
+
+type EditValues = z.infer<typeof editSchema>;
 
 type Props = {
   habit: Habit;
@@ -16,61 +36,78 @@ export default function HabitEditForm({
   onSave,
   isSaving = false,
 }: Props) {
-  const [title, setTitle] = useState(habit.title);
-  const [frequency, setFrequency] = useState(habit.frequency);
-  const [notes, setNotes] = useState(habit.notes || "");
+  const form = useForm<EditValues>({
+    resolver: zodResolver(editSchema),
+    defaultValues: {
+      title: habit.title,
+      frequency: habit.frequency as "daily" | "weekly",
+      notes: habit.notes ?? "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave({ title, frequency, notes });
-  };
+  const onSubmit = form.handleSubmit((data) => {
+    onSave({ title: data.title, frequency: data.frequency, notes: data.notes ?? "" });
+  });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-5 rounded-2xl shadow-md border border-[#d1e8e2] mt-2 space-y-4"
-    >
-      <h3 className="text-xl font-semibold text-[#243E36]">Edit Habit</h3>
-
-      <input
-        className="w-full px-4 py-2 text-gray-900 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-        placeholder="Habit title"
-      />
-
-      <select
-        className="w-full px-4 py-2 text-gray-900 rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#006d77]"
-        value={frequency}
-        onChange={(e) => setFrequency(e.target.value)}
-      >
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
-      </select>
-
-      <textarea
-        className="w-full px-4 py-2 text-gray-900 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#006d77]"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        placeholder="Optional notes..."
-      />
-
-      <div className="flex justify-end gap-3 pt-3">
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
+    <form onSubmit={onSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <label htmlFor="edit-title" className="text-sm font-medium">
+          Title
+        </label>
+        <Input
+          id="edit-title"
+          placeholder="Habit title"
+          {...form.register("title")}
           disabled={isSaving}
-          className="px-4 py-2 bg-[#243E36] text-white rounded-lg hover:bg-[#1b2c28] transition disabled:opacity-70"
+          aria-invalid={!!form.formState.errors.title}
+        />
+        {form.formState.errors.title && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.title.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="edit-frequency" className="text-sm font-medium">
+          Frequency
+        </label>
+        <Select
+          value={form.watch("frequency")}
+          onValueChange={(v) => form.setValue("frequency", v as "daily" | "weekly")}
+          disabled={isSaving}
         >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="daily">Daily</SelectItem>
+            <SelectItem value="weekly">Weekly</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="edit-notes" className="text-sm font-medium">
+          Notes (optional)
+        </label>
+        <Textarea
+          id="edit-notes"
+          placeholder="Optional notes..."
+          {...form.register("notes")}
+          disabled={isSaving}
+          rows={3}
+        />
+      </div>
+
+      <div className="flex justify-end gap-2 pt-2">
+        <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSaving}>
           {isSaving ? "Saving..." : "Save"}
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -15,8 +15,8 @@ export default function HabitCalendar({ completedDates }: Props) {
   const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
 
   return (
-    <div className="mt-4 bg-white p-4 rounded-lg shadow-md border border-gray-200">
-      <div className="grid grid-cols-7 text-sm font-medium text-center text-gray-600 mb-2">
+    <div className="mt-4 rounded-lg border border-border bg-muted/30 p-4">
+      <div className="mb-2 grid grid-cols-7 text-center text-sm font-medium text-muted-foreground">
         {weekdays.map((d, i) => (
           <div key={i} className="uppercase">{d}</div>
         ))}
@@ -31,11 +31,11 @@ export default function HabitCalendar({ completedDates }: Props) {
             <div
               key={idx}
               title={format(day, "PPP")}
-              className={`flex items-center justify-center h-8 rounded-md transition-colors duration-150 ${
+              className={`flex h-8 items-center justify-center rounded-md transition-colors duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-green-500/50 ${
                 completed
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-100 text-gray-500"
-              } hover:ring-2 hover:ring-offset-1 hover:ring-green-400`}
+                  ? "bg-green-500 text-white dark:bg-green-600"
+                  : "bg-muted text-muted-foreground"
+              }`}
             >
               {format(day, "d")}
             </div>
