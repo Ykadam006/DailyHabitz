@@ -14,11 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { HABIT_CATEGORIES } from "@/lib/habitTemplates";
 
 const editSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
   frequency: z.enum(["daily", "weekly"]),
   notes: z.string().max(500).optional(),
+  category: z.string().max(50).optional(),
+  goal: z.number().min(1).max(7).optional(),
+  reminderTime: z.string().max(10).optional(),
 });
 
 type EditValues = z.infer<typeof editSchema>;
@@ -26,7 +30,7 @@ type EditValues = z.infer<typeof editSchema>;
 type Props = {
   habit: Habit;
   onClose: () => void;
-  onSave: (data: { title: string; frequency: string; notes: string }) => void;
+  onSave: (data: EditValues) => void;
   isSaving?: boolean;
 };
 
@@ -42,11 +46,21 @@ export default function HabitEditForm({
       title: habit.title,
       frequency: habit.frequency as "daily" | "weekly",
       notes: habit.notes ?? "",
+      category: habit.category ?? "",
+      goal: habit.goal ?? undefined,
+      reminderTime: habit.reminderTime ?? "",
     },
   });
 
+  const isWeekly = form.watch("frequency") === "weekly";
+
   const onSubmit = form.handleSubmit((data) => {
-    onSave({ title: data.title, frequency: data.frequency, notes: data.notes ?? "" });
+    onSave({
+      ...data,
+      category: data.category || undefined,
+      goal: isWeekly && data.goal ? data.goal : undefined,
+      reminderTime: data.reminderTime || undefined,
+    });
   });
 
   return (
@@ -86,6 +100,64 @@ export default function HabitEditForm({
             <SelectItem value="weekly">Weekly</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      {isWeekly && (
+        <div className="space-y-2">
+          <label htmlFor="edit-goal" className="text-sm font-medium">
+            Goal (times per week)
+          </label>
+          <Select
+            value={form.watch("goal")?.toString() ?? ""}
+            onValueChange={(v) => form.setValue("goal", v ? Number(v) : undefined)}
+            disabled={isSaving}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Optional" />
+            </SelectTrigger>
+            <SelectContent>
+              {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                <SelectItem key={n} value={String(n)}>
+                  {n}×/week
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <label htmlFor="edit-category" className="text-sm font-medium">
+          Category (optional)
+        </label>
+        <Select
+          value={form.watch("category") ?? ""}
+          onValueChange={(v) => form.setValue("category", v)}
+          disabled={isSaving}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            {HABIT_CATEGORIES.map((c) => (
+              <SelectItem key={c} value={c}>
+                {c}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="edit-reminderTime" className="text-sm font-medium">
+          Reminder time (optional)
+        </label>
+        <Input
+          id="edit-reminderTime"
+          type="time"
+          {...form.register("reminderTime")}
+          disabled={isSaving}
+        />
       </div>
 
       <div className="space-y-2">

@@ -1,4 +1,9 @@
-import { format, subDays, isSameDay, startOfToday } from "date-fns";
+"use client";
+
+import { format, subDays, startOfToday } from "date-fns";
+import { motion } from "motion/react";
+import { isSameDayKey } from "@/lib/dateUtils";
+import { transition } from "@/lib/animation";
 
 type Props = {
   completedDates: string[];
@@ -25,10 +30,10 @@ export default function HabitCalendar({ completedDates }: Props) {
       <div className="grid grid-cols-7 gap-1 text-center text-xs">
         {days.map((day, idx) => {
           const completed = completedDates.some((dateStr) =>
-            isSameDay(new Date(dateStr), day)
+            isSameDayKey(dateStr, day)
           );
           return (
-            <div
+            <motion.div
               key={idx}
               title={format(day, "PPP")}
               className={`flex h-8 items-center justify-center rounded-md transition-colors duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-green-500/50 ${
@@ -36,9 +41,12 @@ export default function HabitCalendar({ completedDates }: Props) {
                   ? "bg-green-500 text-white dark:bg-green-600"
                   : "bg-muted text-muted-foreground"
               }`}
+              initial={completed ? { scale: 0.9, opacity: 0.8 } : false}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={completed ? transition.normal : undefined}
             >
               {format(day, "d")}
-            </div>
+            </motion.div>
           );
         })}
       </div>

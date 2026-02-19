@@ -1,14 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import { useHabits, type Habit } from "@/hooks/useHabits";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Flame, Zap, TrendingUp, Target } from "lucide-react";
-import { startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Flame, Zap, TrendingUp, Target, Download, Share2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { isInThisWeek } from "@/lib/dateUtils";
+import { exportAsJson, exportAsCsv } from "@/lib/export";
+import { WeeklySummaryView } from "@/components/WeeklySummaryView";
+import { MICROCOPY } from "@/lib/microcopy";
 
-type Props = { userId: string };
+type Props = { token: string | undefined };
 
-export function InsightsSection({ userId }: Props) {
-  const { habits } = useHabits(userId);
+export function InsightsSection({ token }: Props) {
+  const { habits } = useHabits(token);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const totalXP = habits.reduce((sum: number, h: Habit) => sum + (h.xp ?? 0), 0);
   const longestStreak = habits.reduce(
@@ -16,20 +35,58 @@ export function InsightsSection({ userId }: Props) {
     0
   );
 
-  const thisWeek = { start: startOfWeek(new Date()), end: endOfWeek(new Date()) };
   const completedThisWeek = habits.filter((h: Habit) =>
-    (h.completedDates ?? []).some((d) =>
-      isWithinInterval(new Date(d), thisWeek)
-    )
+    (h.completedDates ?? []).some(isInThisWeek)
   ).length;
+
+  const validHabits = habits.filter((h: Habit) => !h._id.startsWith("temp-"));
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Insights</h2>
-        <p className="text-muted-foreground">
-          Your habit stats and progress
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Insights</h2>
+          <p className="text-muted-foreground">
+            {MICROCOPY.insightsSubtitle}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="size-4 mr-2" />
+                Export
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => exportAsJson(validHabits)}>
+                Export as JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportAsCsv(validHabits)}>
+                Export as CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Dialog open={shareOpen} onOpenChange={setShareOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Share2 className="size-4 mr-2" />
+                Weekly Summary
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-fit">
+              <DialogHeader>
+                <DialogTitle>Share your progress</DialogTitle>
+                <p className="text-sm text-muted-foreground">
+                  {MICROCOPY.weeklySummary}
+                </p>
+              </DialogHeader>
+              <div className="flex justify-center py-4">
+                <WeeklySummaryView token={token} />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -74,8 +131,7 @@ export function InsightsSection({ userId }: Props) {
             Summary
           </CardTitle>
           <CardDescription>
-            You have {habits.filter((h: Habit) => !h._id.startsWith("temp-")).length} active habits.
-            Keep going to build lasting habits!
+            You have {habits.filter((h: Habit) => !h._id.startsWith("temp-")).length} active habits. {MICROCOPY.motivation}
           </CardDescription>
         </CardHeader>
       </Card>

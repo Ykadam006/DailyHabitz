@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { warmUpBackend } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,8 +15,11 @@ import {
   TrendingUp,
   ArrowRight,
 } from "lucide-react";
+import { MICROCOPY } from "@/lib/microcopy";
 
 export default function HomePage() {
+  const { data: session, status } = useSession();
+
   useEffect(() => {
     warmUpBackend();
   }, []);
@@ -30,12 +34,23 @@ export default function HomePage() {
         </Link>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild size="sm">
-            <Link href="/dashboard?section=today">
-              Dashboard
-              <ArrowRight className="ml-1 size-4" />
-            </Link>
-          </Button>
+          {status === "authenticated" ? (
+            <Button asChild size="sm">
+              <Link href="/dashboard?section=today">
+                Dashboard
+                <ArrowRight className="ml-1 size-4" />
+              </Link>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/login">Sign in</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/signup">Sign up</Link>
+              </Button>
+            </>
+          )}
         </div>
       </header>
 
@@ -49,19 +64,35 @@ export default function HomePage() {
               <span className="text-primary">one day at a time</span>
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Track your daily habits, build streaks, earn XP, and watch your
-              progress grow. Simple, fast, and built for consistency.
+              {MICROCOPY.tagline} Track your daily habits, build streaks, earn XP, and watch your
+              progress grow.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link href="/dashboard?section=today">
-                  Get Started
-                  <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/dashboard?section=insights">View Features</Link>
-              </Button>
+              {status === "authenticated" ? (
+                <>
+                  <Button asChild size="lg">
+                    <Link href="/dashboard?section=today">
+                      Dashboard
+                      <ArrowRight className="ml-2 size-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="/dashboard?section=insights">View Insights</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild size="lg">
+                    <Link href="/signup">
+                      Get Started
+                      <ArrowRight className="ml-2 size-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="/login">Sign in</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </section>
 

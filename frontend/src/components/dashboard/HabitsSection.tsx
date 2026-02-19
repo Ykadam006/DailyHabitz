@@ -12,19 +12,20 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import HabitList from "@/components/HabitList";
+import { MICROCOPY } from "@/lib/microcopy";
 
-type Props = { userId: string };
+type Props = { token: string | undefined };
 
-export function HabitsSection({ userId }: Props) {
+export function HabitsSection({ token }: Props) {
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"title" | "streak" | "xp">("title");
+  const [sortBy, setSortBy] = useState<"title" | "streak" | "xp" | "category">("title");
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">All Habits</h2>
         <p className="text-muted-foreground">
-          Manage and track all your habits
+          {MICROCOPY.habitsSubtitle}
         </p>
       </div>
 
@@ -40,12 +41,13 @@ export function HabitsSection({ userId }: Props) {
                 className="pl-9"
               />
             </div>
-            <Select value={sortBy} onValueChange={(v: "title" | "streak" | "xp") => setSortBy(v)}>
+            <Select value={sortBy} onValueChange={(v: "title" | "streak" | "xp" | "category") => setSortBy(v)}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="title">Name</SelectItem>
+                <SelectItem value="category">Category</SelectItem>
                 <SelectItem value="streak">Streak</SelectItem>
                 <SelectItem value="xp">XP</SelectItem>
               </SelectContent>
@@ -54,7 +56,7 @@ export function HabitsSection({ userId }: Props) {
         </CardContent>
       </Card>
 
-      <HabitList userId={userId} search={search} sortBy={sortBy} />
+      <HabitList token={token} search={search} sortBy={sortBy} />
     </div>
   );
 }

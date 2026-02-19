@@ -1,12 +1,16 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useHabits, type Habit } from "@/hooks/useHabits";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Flame, Zap, TrendingUp } from "lucide-react";
+import { isCompletedToday } from "@/lib/dateUtils";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { transition } from "@/lib/animation";
 
 export function InsightsPanel() {
-  const userId = "default-user";
-  const { habits } = useHabits(userId);
+  const { token } = useAuthToken();
+  const { habits } = useHabits(token);
 
   const totalXP = habits.reduce((sum: number, h: Habit) => sum + (h.xp ?? 0), 0);
   const longestStreak = habits.reduce(
@@ -14,9 +18,8 @@ export function InsightsPanel() {
     0
   );
 
-  const today = new Date().toDateString();
   const completedToday = habits.filter((h: Habit) =>
-    (h.completedDates ?? []).some((d) => new Date(d).toDateString() === today)
+    (h.completedDates ?? []).some(isCompletedToday)
   );
   const weeklyCompletion =
     habits.length > 0
@@ -34,7 +37,15 @@ export function InsightsPanel() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{longestStreak}</p>
+            <motion.p
+              key={longestStreak}
+              className="text-2xl font-bold"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={transition.normal}
+            >
+              {longestStreak}
+            </motion.p>
             <p className="text-xs text-muted-foreground">consecutive days</p>
           </CardContent>
         </Card>
@@ -46,7 +57,15 @@ export function InsightsPanel() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{weeklyCompletion}%</p>
+            <motion.p
+              key={weeklyCompletion}
+              className="text-2xl font-bold"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={transition.normal}
+            >
+              {weeklyCompletion}%
+            </motion.p>
             <p className="text-xs text-muted-foreground">
               {completedToday.length} of {habits.length} completed
             </p>
@@ -60,7 +79,15 @@ export function InsightsPanel() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{totalXP}</p>
+            <motion.p
+              key={totalXP}
+              className="text-2xl font-bold"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={transition.normal}
+            >
+              {totalXP}
+            </motion.p>
             <p className="text-xs text-muted-foreground">experience points</p>
           </CardContent>
         </Card>

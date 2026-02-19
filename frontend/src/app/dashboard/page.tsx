@@ -4,24 +4,24 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InsightsPanel } from "@/components/dashboard/InsightsPanel";
+import { InsightsSection } from "@/components/dashboard/InsightsSection";
 import { TodaySection } from "@/components/dashboard/TodaySection";
 import { HabitsSection } from "@/components/dashboard/HabitsSection";
 import { CalendarSection } from "@/components/dashboard/CalendarSection";
-import { InsightsSection } from "@/components/dashboard/InsightsSection";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const section = searchParams.get("section") ?? "today";
-
-  const userId = "default-user";
+  const { token } = useAuthToken();
 
   return (
     <div className="flex flex-1 gap-6 p-4 md:p-6">
       <main className="min-w-0 flex-1">
-        {section === "today" && <TodaySection userId={userId} />}
-        {section === "habits" && <HabitsSection userId={userId} />}
-        {section === "calendar" && <CalendarSection userId={userId} />}
-        {section === "insights" && <InsightsSection userId={userId} />}
+        {section === "today" && <TodaySection token={token} />}
+        {section === "habits" && <HabitsSection token={token} />}
+        {section === "calendar" && <CalendarSection token={token} />}
+        {section === "insights" && <InsightsSection token={token} />}
       </main>
       <InsightsPanel />
     </div>

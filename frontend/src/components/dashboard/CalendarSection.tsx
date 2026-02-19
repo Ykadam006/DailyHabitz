@@ -3,18 +3,19 @@
 import { useHabits, type Habit } from "@/hooks/useHabits";
 import HabitCalendar from "@/components/HabitCalendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MICROCOPY } from "@/lib/microcopy";
 
-type Props = { userId: string };
+type Props = { token: string | undefined };
 
-export function CalendarSection({ userId }: Props) {
-  const { habits } = useHabits(userId);
+export function CalendarSection({ token }: Props) {
+  const { habits } = useHabits(token);
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Calendar</h2>
         <p className="text-muted-foreground">
-          5-week view of your habit completions
+          {MICROCOPY.calendarSubtitle}
         </p>
       </div>
 

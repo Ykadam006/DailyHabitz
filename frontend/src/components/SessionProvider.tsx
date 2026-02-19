@@ -1,9 +1,17 @@
 "use client";
 
-export default function AuthProvider({
+import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
+import { TokenRefresh } from "./TokenRefresh";
+
+export default function SessionProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <NextAuthSessionProvider>
+      <TokenRefresh />
+      {children}
+    </NextAuthSessionProvider>
+  );
 }
