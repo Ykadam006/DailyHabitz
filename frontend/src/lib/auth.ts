@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://dailyhabitz.onrender.com";
 
 export const authOptions: NextAuthOptions = {
   providers: [
