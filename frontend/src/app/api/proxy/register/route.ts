@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const data = await res.json().catch(() => ({}));
     return NextResponse.json(data, { status: res.status });
   } catch (err) {
-    console.error("[proxy/register] Backend unreachable:", err?.message || err);
+    console.error("[proxy/register] Backend unreachable:", err instanceof Error ? err.message : err);
     const message =
       err instanceof Error && err.name === "AbortError"
         ? "Backend is starting up. Please try again in 30 seconds."
