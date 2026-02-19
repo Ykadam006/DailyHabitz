@@ -7,7 +7,7 @@ const { getHealth } = require("./lib/health");
 
 const app = express();
 
-const corsOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
+const corsOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000,https://dailyhabitz-1.onrender.com")
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
@@ -21,6 +21,10 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.get("/", (_req, res) => {
+  res.redirect(301, "/health");
+});
 
 app.get("/health", async (_, res) => {
   try {
